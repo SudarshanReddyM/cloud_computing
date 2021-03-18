@@ -10,6 +10,8 @@ services:
     expose:
       - "15672"
     restart: always
+    networks:
+      - clientnetwork
     
 
   orchestrator:
@@ -22,6 +24,8 @@ services:
       - PYTHONUNBUFFERED=1
     ports:
       - 80:80
+    networks:
+      - clientnetwork
 
   slave:
     build: slave
@@ -31,6 +35,8 @@ services:
       - /usr/bin/docker:/usr/bin/docker
     environment:
       - PYTHONUNBUFFERED=1
+    networks:
+      - clientnetwork
 
   master:
     build: master
@@ -40,9 +46,18 @@ services:
       - /usr/bin/docker:/usr/bin/docker
     environment:
       - PYTHONUNBUFFERED=1
+    networks:
+      - clientnetwork
 
   Zookeeper:
     image: 'zookeeper'
     ports:
       - 2181:2181
     restart: always
+    networks:
+      - clientnetwork
+
+networks:
+  clientnetwork:
+    driver: bridge
+
